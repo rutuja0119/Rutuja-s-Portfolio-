@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Mail, Linkedin, Github, Send, MapPin } from 'lucide-react';
+import { motion } from 'framer-motion';
+import AnimatedSection, { SlideInLeft, SlideInRight, StaggerContainer, StaggerItem } from './AnimatedSection';
 
 const socialLinks = [
   {
@@ -43,7 +45,7 @@ const Contact = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <AnimatedSection className="text-center mb-16">
             <span className="text-primary font-medium text-sm tracking-wider uppercase">
               Get In Touch
             </span>
@@ -53,11 +55,11 @@ const Contact = () => {
             <p className="section-subheading mx-auto mt-4">
               Have a project in mind or just want to say hello? I'd love to hear from you!
             </p>
-          </div>
+          </AnimatedSection>
 
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <div className="space-y-8">
+            <SlideInLeft className="space-y-8">
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-6">
                   Reach Out Directly
@@ -69,88 +71,115 @@ const Contact = () => {
               </div>
 
               {/* Social Links */}
-              <div className="space-y-4">
+              <StaggerContainer className="space-y-4">
                 {socialLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center gap-4 p-4 bg-card rounded-xl shadow-soft transition-all ${link.color}`}
-                  >
-                    <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-                      <link.icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">{link.name}</p>
-                      <p className="text-muted-foreground text-sm">{link.label}</p>
-                    </div>
-                  </a>
+                  <StaggerItem key={link.name}>
+                    <motion.a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-4 p-4 bg-card rounded-xl shadow-soft transition-all ${link.color}`}
+                      whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                    >
+                      <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+                        <link.icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{link.name}</p>
+                        <p className="text-muted-foreground text-sm">{link.label}</p>
+                      </div>
+                    </motion.a>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
 
               {/* Location */}
-              <div className="flex items-center gap-3 text-muted-foreground">
+              <motion.div
+                className="flex items-center gap-3 text-muted-foreground"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+              >
                 <MapPin className="w-5 h-5 text-primary" />
                 <span>Khed, Maharashtra, India</span>
-              </div>
-            </div>
+              </motion.div>
+            </SlideInLeft>
 
             {/* Contact Form */}
-            <div className="bg-card p-8 rounded-2xl shadow-soft">
-              <h3 className="font-serif text-xl font-bold mb-6">Send a Message</h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="John Doe"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="john@example.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    rows={5}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
-                    placeholder="Tell me about your project or just say hi..."
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-all"
-                >
-                  <Send className="w-5 h-5" />
-                  Send Message
-                </button>
-              </form>
-            </div>
+            <SlideInRight>
+              <div className="bg-card p-8 rounded-2xl shadow-soft">
+                <h3 className="font-serif text-xl font-bold mb-6">Send a Message</h3>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <label htmlFor="name" className="block text-sm font-medium mb-2">
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                      placeholder="John Doe"
+                      required
+                    />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <label htmlFor="email" className="block text-sm font-medium mb-2">
+                      Your Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <label htmlFor="message" className="block text-sm font-medium mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      rows={5}
+                      className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                      placeholder="Tell me about your project or just say hi..."
+                      required
+                    />
+                  </motion.div>
+                  <motion.button
+                    type="submit"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-primary-foreground rounded-lg font-medium"
+                    whileHover={{ scale: 1.02, opacity: 0.9 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </motion.button>
+                </form>
+              </div>
+            </SlideInRight>
           </div>
         </div>
       </div>
